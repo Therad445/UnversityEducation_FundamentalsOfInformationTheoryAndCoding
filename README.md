@@ -1,2 +1,2 @@
-# NewRepo2
+# UnversityEducation_FundamentalsOfInformationTheoryAndCoding
 One semester Fundamentals of information theory and coding

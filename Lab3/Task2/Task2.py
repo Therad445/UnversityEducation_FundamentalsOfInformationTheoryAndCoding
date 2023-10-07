@@ -1,81 +1,44 @@
-import heapq
-import collections
 import pickle
 
 class HuffmanNode:
-    def __init__(self, char, freq):
-        self.char = char
-        self.freq = freq
-        self.left = None
-        self.right = None
+    # Определение класса HuffmanNode, как было показано в предыдущем ответе
 
-    def __lt__(self, other):
-        return self.freq < other.freq
-
-def build_huffman_tree(freq_dict):
-    heap = [HuffmanNode(char, freq) for char, freq in freq_dict.items()]
-    heapq.heapify(heap)
-
-    while len(heap) > 1:
-        left = heapq.heappop(heap)
-        right = heapq.heappop(heap)
-        merged_node = HuffmanNode(None, left.freq + right.freq)
-        merged_node.left = left
-        merged_node.right = right
-        heapq.heappush(heap, merged_node)
-
-    return heap[0]
-
-def build_huffman_codes(node, current_code, codes):
-    if node.char is not None:
-        codes[node.char] = current_code
-    if node.left:
-        build_huffman_codes(node.left, current_code + '0', codes)
-    if node.right:
-        build_huffman_codes(node.right, current_code + '1', codes)
-
-def compress(input_file, output_file):
-    with open(input_file, 'rb') as file:
-        data = file.read()
-
-    freq_dict = collections.Counter(data)
-    root = build_huffman_tree(freq_dict)
-    huffman_codes = {}
-    build_huffman_codes(root, '', huffman_codes)
-
-    compressed_data = []
-    for char in data:
-        compressed_data.append(huffman_codes[char])
-
-    with open(output_file, 'wb') as file:
-        pickle.dump((root, compressed_data), file)
-
-def decompress(input_file, output_file):
+def decode_huffman(input_file, output_file):
     with open(input_file, 'rb') as file:
         root, compressed_data = pickle.load(file)
 
-    decompressed_data = []
-    current_node = root
+    # Ваш код для декомпрессии данных, как было показано в предыдущем ответе
 
-    for bit in compressed_data:
-        if bit == '0':
-            current_node = current_node.left
+def decode_format(input_file, output_file):
+    # Определите формат сигнатуры и другие необходимые параметры
+    signature = b'\x12\x34\x56'  # Пример сигнатуры
+    version = 1  # Версия формата
+    algorithm_code = 1  # Код алгоритма (ваш код)
+
+    with open(input_file, 'rb') as file:
+        file_signature = file.read(len(signature))
+
+        if file_signature != signature:
+            print("Ошибка: Несовпадение сигнатуры")
+            return
+
+        file_version = int.from_bytes(file.read(1), byteorder='big')
+
+        if file_version != version:
+            print(f"Ошибка: Несовпадение версии (ожидается {version}, получено {file_version})")
+            return
+
+        file_algorithm_code = int.from_bytes(file.read(1), byteorder='big')
+
+        if file_algorithm_code == algorithm_code:
+            decode_huffman(input_file, output_file)
+        # Добавьте условия для других поддерживаемых алгоритмов
+        # elif file_algorithm_code == другой_код:
+        #     decode_другой_алгоритм(input_file, output_file)
         else:
-            current_node = current_node.right
-
-        if current_node.char is not None:
-            decompressed_data.append(current_node.char)
-            current_node = root
-
-    decompressed_data = bytes(decompressed_data)
-
-    with open(output_file, 'wb') as file:
-        file.write(decompressed_data)
+            print(f"Ошибка: Неподдерживаемый код алгоритма: {file_algorithm_code}")
 
 # Пример использования:
-input_file = 'input.txt'
-output_file = 'compressed.huffman'
-compress(input_file, output_file)
-decompressed_file = 'decompressed.txt'
-decompress(output_file, decompressed_file)
-
+input_file = 'compressed.huffman'  # Замените на путь к вашему сжатому файлу
+output_file = 'decompressed.txt'  # Замените на имя файла для разжатых данных
+decode_format(input_file, output_file)

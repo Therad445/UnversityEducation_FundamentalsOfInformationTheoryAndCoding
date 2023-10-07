@@ -1,13 +1,21 @@
-def calculate_huffman_codes_and_lengths(data, bit_depth):
-    # Ваш код для вычисления кодов Хаффмана
-    pass
+import library_name  # Замените на имя выбранной библиотеки
 
-def calculate_lengths(data, bit_depth):
-    # Ваш код для вычисления Ci и Di
-    pass
+# Создайте объект для кодирования и декодирования (Хэмминг или Рида-Соломона)
+coder = library_name.Coder()
 
-# Пример использования:
-file_data = read_file("example_file.bin")  # Замените на чтение данных из файла
-bit_depth = 8  # Замените на нужную разрядность (8, 4 или 32)
-calculate_huffman_codes_and_lengths(file_data, bit_depth)
+# Задайте параметры (размер блока, количество исправляемых ошибок и т.д.)
 
+# Создайте тестовые данные с E ошибками
+data_with_errors = coder.encode(data_without_errors)  # Закодируйте данные
+
+# Добавьте E ошибок в данные
+
+# Попробуйте декодировать данные с E ошибками
+decoded_data = coder.decode(data_with_errors)
+
+# Попробуйте декодировать данные с E+1 ошибкой
+decoded_data_with_extra_error = coder.decode(data_with_extra_error)
+
+# Проверьте результаты декодирования
+print("Декодированные данные с E ошибками:", decoded_data)
+print("Декодированные данные с E+1 ошибкой:", decoded_data_with_extra_error)

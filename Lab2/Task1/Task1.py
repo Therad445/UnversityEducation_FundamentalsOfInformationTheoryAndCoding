@@ -7,8 +7,8 @@ def calculate_information(probability):
         return 0
     return -math.log2(probability)
 
-# Открываем файл для анализа
-file_path = 'путь_к_вашему_файлу.txt'  # Замените на путь к вашему файлу
+# Открываем файл для анализа (замените "file.txt" на имя вашего файла)
+file_path = "file.txt"
 with open(file_path, 'rb') as file:
     file_content = file.read()
 
@@ -39,4 +39,3 @@ for byte, prob in sorted_byte_probabilities_by_freq:
     print(f"Символ: {byte}, Вероятность: {prob:.6f}, Информация: {byte_information[byte]:.6f}")
 print(f"\nСуммарное количество информации в файле: {total_information:.6f} бит")
 print(f"Суммарное количество информации в файле: {total_information / 8:.6f} байт")
-

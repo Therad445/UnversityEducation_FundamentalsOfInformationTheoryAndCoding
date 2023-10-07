@@ -8,8 +8,8 @@ def calculate_information(probability):
         return 0
     return -math.log2(probability)
 
-# Открываем файл для анализа
-file_path = 'путь_к_вашему_файлу.txt'  # Замените на путь к вашему файлу
+# Открываем файл для анализа (замените "file.txt" на имя вашего файла)
+file_path = "file.txt"
 with open(file_path, 'r', encoding='utf-8') as file:
     file_content = file.read()
 

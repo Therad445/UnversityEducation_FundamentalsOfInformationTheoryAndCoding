@@ -5,6 +5,8 @@ import sys
 import pandas
 from datetime import datetime
 
+from compression import huffman as h
+
 
 def log_warn(mes: str):
     print(f'{datetime.now()} [WARN] : {mes}')
@@ -254,7 +256,7 @@ def write_from_dict(data):
     return new_data
 
 
-def zip_item(filepath):
+def zip_without_compress(filepath):
     fd = create_out_file(OUT_FILE_NAME)
     data = write_from_dict(zip_loop(filepath))
     fd.write(generate_signature(data_size=sys.getsizeof(data)))
@@ -262,12 +264,32 @@ def zip_item(filepath):
     fd.close()
 
 
-def unzip_item(filepath):
+def unzip_item(filepath, output):
     with open(filepath, 'rb') as file:
         signature = file.read(SIGNATURE_SIZE)
         if check_signature(signature):
-            data = read_dir(file.read())
-            unzip_loop(data, os.path.join('.', 'unzip'))
+            codes = unpack_signature(signature)
+            check_compress_code(filepath, output, signature)
+
+def decode_no_compressed(file):
+    data = read_dir(file.read())
+    unzip_loop(data, os.path.join('.', 'unzip'))
+
+
+def decode_huffman(filepath, output):
+    h.decode_file(filepath, output)
+
+
+def decode_ariph(filepath, output):
+
+
+
+def check_compress_code(filepath, output, code):
+    codes = parse_codes(code)
+    if codes[0]:
+        decode_huffman(filepath, output)
+    elif codes[1]:
+
 
 
 def task1():
